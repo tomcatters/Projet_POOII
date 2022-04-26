@@ -56,4 +56,8 @@ public class ModeleEmploye implements DAOEmploye{
     public List<Employe> readAll(){
         return lEmploye;
     }
+
+    public List<Competence> listeDisciplinesEtNiveau(Employe emp) {
+        return emp.listeDisciplinesEtNiveau();
+    }
 }

@@ -2,6 +2,7 @@ package entreprise_info.modele;
 
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
+import entreprise_info.metier.Travail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,5 +55,13 @@ public class ModelProjet implements DAOProjet{
 
     public List<Projet> readAll(){
         return lProjet;
+    }
+
+    public List<Employe> listeEmployesDisciplineBase(Projet pjt,int niv){
+        return pjt.listeEmployesDisciplineBase(niv);
+    }
+
+    public List<Travail> listeEmployesEtPourcentageEtDate(Projet pjt){
+        return pjt.listeEmployesEtPourcentageEtDate();
     }
 }

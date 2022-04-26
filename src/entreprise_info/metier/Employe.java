@@ -38,6 +38,14 @@ public class Employe {
         this.mail = mail;
     }
 
+    public Employe(int matricule, String nom, String prenom, String tel, String mail) {
+        this.matricule = matricule;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+        this.mail = mail;
+    }
+
     /**
      *
      *  ajout d'une discipline a un employé

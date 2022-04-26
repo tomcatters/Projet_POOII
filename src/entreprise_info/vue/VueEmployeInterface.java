@@ -1,4 +1,9 @@
 package entreprise_info.vue;
 
-public interface VueEmployeInterface {
+import entreprise_info.metier.Employe;
+
+import java.util.List;
+
+public interface VueEmployeInterface extends VueInterface<Employe,Integer>{
+    void affLobj(List lobj);
 }
