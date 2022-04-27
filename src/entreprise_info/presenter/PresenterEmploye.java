@@ -81,6 +81,18 @@ public class PresenterEmploye {
 
     protected void suppression(){
         Employe empRech = recherche();
+        if (empRech != null){
+            String rep;
+            do {
+                rep = vueE.getMsg("confirmez-vous la suppression (o/n) ? ");
+
+            } while (!rep.equalsIgnoreCase("o") && !rep.equalsIgnoreCase("n"));
+
+            if (rep.equalsIgnoreCase("o")) {
+                if( mdE.delete(empRech))vueE.displayMsg("Employé supprimé");
+                else vueE.displayMsg("Employé non supprimé");
+            }
+        }
     }
 
     protected void affAll(){

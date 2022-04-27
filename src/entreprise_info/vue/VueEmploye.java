@@ -1,6 +1,7 @@
 package entreprise_info.vue;
 
 import entreprise_info.metier.Employe;
+import entreprise_info.metier.Competence;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
     }
 
     public void display(Employe emp){
-        /*displayMsg(emp.toString());
+        displayMsg(emp.toString());
         if (!emp.listeDisciplinesEtNiveau().isEmpty()) {
             String rep;
             do {
@@ -29,11 +30,11 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
             } while (!rep.equalsIgnoreCase("o") && !rep.equalsIgnoreCase("n"));
 
             if (rep.equalsIgnoreCase("o")) {
-                for (ComFact cf : cl.getComFacts()) {
-                    displayMsg(cf.toString());
+                for (Competence cpt : emp.listeDisciplinesEtNiveau()) {
+                    displayMsg(cpt.toString());
                 }
             }
-        }*/
+        }
     }
 
     public Integer read(){
