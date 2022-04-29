@@ -11,6 +11,8 @@ public class PresenterEmploye {
     private DAOEmploye mdE;
     private VueEmployeInterface vueE;
 
+    private PesenterDisciplines pD;
+
     private Scanner sc = new Scanner(System.in);
 
     public PresenterEmploye(DAOEmploye mdE, VueEmployeInterface vueE) {
@@ -18,9 +20,13 @@ public class PresenterEmploye {
         this.vueE = vueE;
     }
 
+    public void setpD(PesenterDisciplines pD) {
+        this.pD = pD;
+    }
+
     public void Gestion(){
         do {
-            System.out.println("1.ajout\n2.recherche\n3.modification\n4.suppression\n5.fin");
+            System.out.println("1.ajout\n2.recherche\n3.modification\n4.suppression\n5.gestion des sisciplines\n6.fin");
             System.out.println("choix : ");
             int ch = sc.nextInt();
             sc.skip("\n");
@@ -38,12 +44,35 @@ public class PresenterEmploye {
                     suppression();
                     break;
                 case 5:
+                    gestDisc();
+                    break;
+                case 6:
                     System.exit(0);
                     break;
                 default:
                     System.out.println("choix invalide recommencez ");
             }
         } while (true);
+    }
+
+    private void gestDisc(){
+        System.out.println("1.ajoout discipline\n2.modification discipline\n3.suppression discipline\n4.fin");
+        System.out.println("choix : ");
+        int ch = sc.nextInt();
+        sc.skip("\n");
+        switch (ch){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                System.exit(0);
+                break;
+            default:
+                System.out.println("choix invalide recommencez ");
+        }
     }
 
     protected void ajout(){
@@ -61,7 +90,7 @@ public class PresenterEmploye {
 
     protected Employe recherche(){
         int nRech = vueE.read();
-        Employe emp = new Employe(nRech,0,"","","","");
+        Employe emp = new Employe(nRech,0,null,null,null,null);
         emp = mdE.read(emp);
         if (emp == null){
             vueE.displayMsg("Employé introuvable");

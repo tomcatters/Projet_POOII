@@ -61,7 +61,7 @@ public class PesenterDisciplines {
 
     protected Disciplines recherche(){
         int nRech = vueD.read();
-        Disciplines disc = new Disciplines(nRech,"","");
+        Disciplines disc = new Disciplines(nRech,null,null);
         disc = mdD.read(disc);
         if (disc == null){
             vueD.displayMsg("Employé introuvable");
