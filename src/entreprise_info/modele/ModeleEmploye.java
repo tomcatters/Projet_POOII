@@ -43,6 +43,18 @@ public class ModeleEmploye implements DAOEmploye{
         }
     }
 
+    public boolean addDiscipline(Employe emp,Disciplines d, int niv){
+        return emp.addDiscipline(d,niv);
+    }
+
+    public boolean modifDiscipline(Employe emp,Disciplines d, int niv){
+        return emp.modifDiscipline(d,niv);
+    }
+
+    public boolean suppDiscipline(Employe emp,Disciplines d){
+        return emp.suppDiscipline(d);
+    }
+
     public Employe read(Employe employeRech){
         int idRech = employeRech.getId_employe();
         for (Employe emp:lEmploye) {

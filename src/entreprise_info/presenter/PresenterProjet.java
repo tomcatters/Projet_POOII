@@ -22,12 +22,8 @@ public class PresenterProjet {
     }
 
     public void gestion() {
-
         do {
-            System.out.println("1.ajout\n2.recherche\n3.modification\n4.suppression\n5.fin");
-            System.out.println("choix : ");
-            int ch = sc.nextInt();
-            sc.skip("\n");
+            int ch = vueP.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.pourcentage total","7.gestion des equipes","6.fin"});
             switch (ch) {
                 case 1:
                     ajout();
@@ -42,6 +38,12 @@ public class PresenterProjet {
                     suppression();
                     break;
                 case 5:
+                    pourTot();
+                    break;
+                case 6:
+                    gestEqp();
+                    break;
+                case 7:
                     System.exit(0);
                     break;
                 default:
@@ -49,6 +51,28 @@ public class PresenterProjet {
             }
         } while (true);
 
+    }
+
+    private void gestEqp(){
+        Projet p = recherche();
+
+        if (p!=null){
+            int ch = vueP.menu(new String[]{"1.ajout d'un employé", "2.modification d'un employé", "3.suppression d'un employé","4.fin"});
+            do {
+                switch (ch){
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        vueP.displayMsg("choix invalide recommencez ");
+                }
+            }while (true);
+        }
     }
 
     protected void ajout(){
@@ -96,6 +120,13 @@ public class PresenterProjet {
                 if( mdP.delete(pRech))vueP.displayMsg("Projet supprimé");
                 else vueP.displayMsg("Projet non supprimé");
             }
+        }
+    }
+
+    private void pourTot(){
+        Projet p = recherche();
+        if(p!=null){
+            vueP.displayMsg("Pourcentage totale: "+mdP.totPour(p));
         }
     }
 

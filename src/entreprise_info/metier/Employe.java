@@ -57,7 +57,7 @@ public class Employe {
     public boolean addDiscipline(Disciplines d, int nivComp){
         Competence c;
         c = new Competence(d,nivComp);
-        if(lComp.contains(c)){
+        if(!lComp.contains(c)){
             lComp.add(c);
             return true;
         }

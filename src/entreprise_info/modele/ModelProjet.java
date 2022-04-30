@@ -64,4 +64,6 @@ public class ModelProjet implements DAOProjet{
     public List<Travail> listeEmployesEtPourcentageEtDate(Projet pjt){
         return pjt.listeEmployesEtPourcentageEtDate();
     }
+
+    public int totPour(Projet p){return p.totalPourcentage();}
 }
