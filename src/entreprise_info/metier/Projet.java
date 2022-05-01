@@ -7,39 +7,60 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Projet {
-    protected int id_Projet,cout;
-    protected Disciplines id_DisciplineBase;
+
+    private static int idProjet=0;
+    protected int id_Projet;
     protected String titre;
     protected Date dateDebut, dateFin;
+    protected int cout;
+    protected Disciplines id_DisciplineBase;
     protected List<Travail> lTrav = new ArrayList<>();
+
     private Scanner sc = new Scanner(System.in);
 
-    public Projet(int id_Projet, int cout, Disciplines id_DisciplineBase, String titre, Date dateDebut, Date dateFin) {
+    public Projet(int id_Projet, String titre, Date dateDebut, Date dateFin, int cout, Disciplines id_DisciplineBase) {
         this.id_Projet = id_Projet;
-        this.cout = cout;
-        this.id_DisciplineBase = id_DisciplineBase;
         this.titre = titre;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.cout = cout;
+        this.id_DisciplineBase = id_DisciplineBase;
     }
 
+    public Projet(String titre, Date dateDebut, Date dateFin, int cout, Disciplines id_DisciplineBase) {
+        this.id_Projet = idProjet++;
+        this.titre = titre;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.cout = cout;
+        this.id_DisciplineBase = id_DisciplineBase;
+    }
 
-    public void addEmploye(Employe e, int pourcentage, Date dateEngag){
+    public boolean addEmploye(Employe e, int pourcentage, Date dateEngag){
         Travail t;
         t = new Travail(e,pourcentage,dateEngag);
-        lTrav.add(t);
+        if(!lTrav.contains(t)){
+            lTrav.add(t);
+            return true;
+        }
+        return false;
     }
 
-    public void modifEmploye(Employe e, int pourcentage){
+    public boolean modifEmploye(Employe e, int pourcentage){
         if (lTrav.contains(e)){
             lTrav.get(lTrav.indexOf(e)).setPourcentage(pourcentage);
+            return true;
         }
+        return false;
     }
 
-    public void supEmploye(Employe e){
-        int indexT;
-        indexT = lTrav.indexOf(e);
-        lTrav.remove(indexT);
+    public boolean supEmploye(Employe e){
+        Travail t = new Travail(e,0,null);
+        if(lTrav.contains(t)){
+            lTrav.remove(t);
+            return true;
+        }
+        return false;
     }
 
     public List<Employe> listeEmployesDisciplineBase(int niv){

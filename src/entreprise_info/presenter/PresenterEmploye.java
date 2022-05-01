@@ -150,17 +150,17 @@ public class PresenterEmploye {
         }
     }
 
-    private void addDiscipline(Employe emp,Disciplines d){
+    protected void addDiscipline(Employe emp,Disciplines d){
         int n=choixNiveau();
         mdE.addDiscipline(emp,d,n);
     }
 
-    private void modifDiscipline(Employe emp,Disciplines d){
+    protected void modifDiscipline(Employe emp,Disciplines d){
         int n=choixNiveau();
         mdE.modifDiscipline(emp,d,n);
     }
 
-    private void suppDiscipline(Employe emp, Disciplines d){
+    protected void suppDiscipline(Employe emp, Disciplines d){
         mdE.suppDiscipline(emp,d);
     }
 

@@ -12,9 +12,11 @@ import java.util.*;
 
 public class Employe {
 
+    private static  int idEmp=0;
     protected int id_employe,matricule;
     protected String nom,prenom,tel,mail;
     protected List<Competence> lComp = new ArrayList();
+
     private Scanner sc = new Scanner(System.in);
 
     /**
@@ -39,6 +41,7 @@ public class Employe {
     }
 
     public Employe(int matricule, String nom, String prenom, String tel, String mail) {
+        this.id_employe = idEmp++;
         this.matricule = matricule;
         this.nom = nom;
         this.prenom = prenom;

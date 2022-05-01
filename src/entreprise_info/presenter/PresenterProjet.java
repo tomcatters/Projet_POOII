@@ -1,9 +1,13 @@
 package entreprise_info.presenter;
 
+import entreprise_info.metier.Disciplines;
+import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
 import entreprise_info.modele.DAOProjet;
 import entreprise_info.vue.VueProjetInterface;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class PresenterProjet {
@@ -14,11 +18,25 @@ public class PresenterProjet {
 
     private PresenterEmploye pE;
 
+    private PesenterDisciplines pD;
+
     private Scanner sc = new Scanner(System.in);
 
     public PresenterProjet(DAOProjet mdP, VueProjetInterface vueP) {
         this.mdP = mdP;
         this.vueP = vueP;
+    }
+
+    public void setpE(PresenterEmploye pE) {
+        this.pE = pE;
+    }
+
+    public void setpD(PesenterDisciplines pD) {
+        this.pD = pD;
+    }
+
+    public PesenterDisciplines getpD() {
+        return pD;
     }
 
     public void gestion() {
@@ -61,13 +79,16 @@ public class PresenterProjet {
             do {
                 switch (ch){
                     case 1:
+                        addEmploye(p);
                         break;
                     case 2:
+                        modifEmploye(p);
                         break;
                     case 3:
+                        supEmploye(p);
                         break;
                     case 4:
-                        break;
+                        return;
                     default:
                         vueP.displayMsg("choix invalide recommencez ");
                 }
@@ -77,6 +98,8 @@ public class PresenterProjet {
 
     protected void ajout(){
         Projet pNew = vueP.create();
+        Disciplines d = pD.recherche();
+        pNew.setId_DisciplineBase(d);
         pNew = mdP.create(pNew);
         if (pNew==null){
             vueP.displayMsg("erreur lors de la création du projet - doublon");
@@ -89,7 +112,7 @@ public class PresenterProjet {
 
     protected Projet recherche(){
         int nRech = vueP.read();
-        Projet p = new Projet(nRech,0,null,null,null,null);
+        Projet p = new Projet(nRech,null,null,null,0,null);
         p = mdP.read(p);
         if (p == null){
             vueP.displayMsg("Projet introuvable");
@@ -121,6 +144,24 @@ public class PresenterProjet {
                 else vueP.displayMsg("Projet non supprimé");
             }
         }
+    }
+
+    protected void addEmploye(Projet p){
+        Employe emp = pE.recherche();
+        int pour = Integer.parseInt(vueP.getMsg("Pourcentage: "));
+        Date d = vueP.initDate();
+        mdP.addEmploye(p,emp,pour,d);
+    }
+
+    protected void modifEmploye(Projet p){
+        Employe emp = pE.recherche();
+        int pour = Integer.parseInt(vueP.getMsg("Pourcentage: "));
+        mdP.modifEmploye(p,emp,pour);
+    }
+
+    protected void supEmploye(Projet p){
+        Employe emp = pE.recherche();
+        mdP.supEmploye(p,emp);
     }
 
     private void pourTot(){

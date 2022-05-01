@@ -5,6 +5,7 @@ import entreprise_info.metier.Projet;
 import entreprise_info.metier.Travail;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ModelProjet implements DAOProjet{
@@ -51,6 +52,18 @@ public class ModelProjet implements DAOProjet{
             }
         }
         return null;
+    }
+
+    public boolean addEmploye(Projet p,Employe e, int pourcentage, Date dateEngag){
+        return p.addEmploye(e,pourcentage,dateEngag);
+    }
+
+    public boolean modifEmploye(Projet p,Employe e, int pourcentage){
+        return p.modifEmploye(e,pourcentage);
+    }
+
+    public boolean supEmploye(Projet p,Employe e){
+        return p.supEmploye(e);
     }
 
     public List<Projet> readAll(){
