@@ -4,11 +4,19 @@ import java.util.Objects;
 
 public class Disciplines {
 
+    private static int idDisc;
+
     protected int id_Discipline;
     protected String nom,description;
 
     public Disciplines(int id_Discipline, String nom, String description) {
         this.id_Discipline = id_Discipline;
+        this.nom = nom;
+        this.description = description;
+    }
+
+    public Disciplines(String nom, String description) {
+        this.id_Discipline=idDisc++;
         this.nom = nom;
         this.description = description;
     }

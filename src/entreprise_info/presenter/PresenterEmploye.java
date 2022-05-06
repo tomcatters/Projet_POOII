@@ -30,7 +30,7 @@ public class PresenterEmploye {
 
     public void Gestion(){
         do {
-            int ch = vueE.menu(new String[]{"1.ajout", "2.recherche","3.modification","n4.suppression","5.gestion des disciplines","6.affichage des disciplines","7.fin"});
+            int ch = vueE.menu(new String[]{"1.ajout", "2.recherche","3.modification","n4.suppression","5.gestion des disciplines","6.afficher tous","7.fin"});
             switch (ch) {
                 case 1:
                     ajout();
@@ -48,7 +48,7 @@ public class PresenterEmploye {
                     gestDisc();
                     break;
                 case 6:
-                    affDisc();
+                    affAll();
                     break;
                 case 7:
                     System.exit(0);
@@ -63,28 +63,24 @@ public class PresenterEmploye {
 
         Employe emp = recherche();
 
-        int n;
-
-        vueE.affLobj(emp.listeDisciplinesEtNiveau());
-        int choix = Integer.parseInt(vueE.getMsg("choix : "));
-
-        Disciplines d = emp.listeDisciplinesEtNiveau().get(choix).getId_Discipline();
-
         if (emp != null) {
             do {
                 boolean check=false;
-                int ch = vueE.menu(new String[]{"1.ajout discipline", "2.modification discipline", "3.suppression discipline","4.fin"});
+                int ch = vueE.menu(new String[]{"1.ajout discipline", "2.modification discipline", "3.suppression discipline","4.affichage des disciplines","4.fin"});
                 switch (ch) {
                     case 1:
-                        addDiscipline(emp,d);
+                        addDiscipline(emp);
                         break;
                     case 2:
-                        modifDiscipline(emp,d);
+                        modifDiscipline(emp);
                         break;
                     case 3:
-                        suppDiscipline(emp,d);
+                        suppDiscipline(emp);
                         break;
                     case 4:
+                        affDisc();
+                        break;
+                    case 5:
                         return;
                     default:
                         vueE.displayMsg("choix invalide recommencez ");
@@ -150,26 +146,21 @@ public class PresenterEmploye {
         }
     }
 
-    protected void addDiscipline(Employe emp,Disciplines d){
-        int n=choixNiveau();
+    protected void addDiscipline(Employe emp){
+        Disciplines d = pD.recherche();
+        int n=vueE.choixNiveau();
         mdE.addDiscipline(emp,d,n);
     }
 
-    protected void modifDiscipline(Employe emp,Disciplines d){
-        int n=choixNiveau();
+    protected void modifDiscipline(Employe emp){
+        Disciplines d = pD.choixDiscipline(emp);
+        int n=vueE.choixNiveau();
         mdE.modifDiscipline(emp,d,n);
     }
 
-    protected void suppDiscipline(Employe emp, Disciplines d){
+    protected void suppDiscipline(Employe emp){
+        Disciplines d = pD.choixDiscipline(emp);
         mdE.suppDiscipline(emp,d);
-    }
-
-    private int choixNiveau(){
-        int c;
-        do {
-            c = Integer.parseInt(vueE.getMsg("choix de niveau: "));
-            return c;
-        }while (c>=1 && c<=3);
     }
 
     private void affDisc(){

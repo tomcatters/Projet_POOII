@@ -70,7 +70,7 @@ public class ModelProjet implements DAOProjet{
         return lProjet;
     }
 
-    public List<Employe> listeEmployesDisciplineBase(Projet pjt,int niv){
+    public List<Travail> listeEmployesDisciplineBase(Projet pjt,int niv){
         return pjt.listeEmployesDisciplineBase(niv);
     }
 

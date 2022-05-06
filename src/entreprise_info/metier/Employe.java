@@ -117,6 +117,14 @@ public class Employe {
         return lComp;
     }
 
+    public List<Competence> getlComp() {
+        return lComp;
+    }
+
+    public void setlComp(List<Competence> lComp) {
+        this.lComp = lComp;
+    }
+
     /**
      *
      *  getter identifiant d'un employé

@@ -3,11 +3,13 @@ package entreprise_info.presenter;
 import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
+import entreprise_info.metier.Travail;
 import entreprise_info.modele.DAOProjet;
 import entreprise_info.vue.VueProjetInterface;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class PresenterProjet {
@@ -41,7 +43,7 @@ public class PresenterProjet {
 
     public void gestion() {
         do {
-            int ch = vueP.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.pourcentage total","7.gestion des equipes","6.fin"});
+            int ch = vueP.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.pourcentage total","6.gestion des equipes","7.option d'affichage","8.fin"});
             switch (ch) {
                 case 1:
                     ajout();
@@ -62,6 +64,9 @@ public class PresenterProjet {
                     gestEqp();
                     break;
                 case 7:
+                    gestAff();
+                    break;
+                case 8:
                     System.exit(0);
                     break;
                 default:
@@ -92,6 +97,25 @@ public class PresenterProjet {
                     default:
                         vueP.displayMsg("choix invalide recommencez ");
                 }
+            }while (true);
+        }
+    }
+
+    private void gestAff(){
+        Projet p = recherche();
+
+        if (p!=null){
+            int ch = vueP.menu(new String[]{"1.Liste des employé d'un projet","2.Liste des employé ayant un niveau egal ou superieur a la disciplines de base d'un projet","3.fin"});
+            do {
+              switch (ch){
+                  case 1:
+                      affEmpPourDate(p);
+                      break;
+                  case 2:
+                      affEmpDiscBase(p);
+                      break;
+                  case 3:return;
+              }
             }while (true);
         }
     }
@@ -164,11 +188,22 @@ public class PresenterProjet {
         mdP.supEmploye(p,emp);
     }
 
-    private void pourTot(){
+    protected void pourTot(){
         Projet p = recherche();
         if(p!=null){
             vueP.displayMsg("Pourcentage totale: "+mdP.totPour(p));
         }
+    }
+
+    protected void affEmpPourDate(Projet p){
+        List<Travail> lTrEmpPourDt = mdP.listeEmployesEtPourcentageEtDate(p);
+        vueP.affLobj(lTrEmpPourDt);
+    }
+
+    protected void affEmpDiscBase(Projet p){
+        int niv = Integer.parseInt("niveau: ");
+        List<Travail> lTrEmpDiscB = mdP.listeEmployesDisciplineBase(p,niv);
+        vueP.affLobj(lTrEmpDiscB);
     }
 
     protected void affAll(){

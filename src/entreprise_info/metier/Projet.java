@@ -63,23 +63,25 @@ public class Projet {
         return false;
     }
 
-    public List<Employe> listeEmployesDisciplineBase(int niv){
-        List<Competence> compList = new ArrayList<>();
-        List <Employe> lEmpNiv = new ArrayList<>();
+    public List<Travail> listeEmployesDisciplineBase(int niv){
+        //List<Competence> compList = new ArrayList<>();
+        List<Competence> compList;
+        List <Travail> lTrEmpNiv = new ArrayList<>();
 
         for (Travail t:lTrav) {
             compList = t.getEmp().listeDisciplinesEtNiveau();
             for (Competence c: compList){
                 if (c.getNiveau() >= niv && c.getId_Discipline().equals(id_DisciplineBase)){
-                    lEmpNiv.add(t.getEmp());
+                    //lTrEmpNiv.add(t.getEmp());
+                    lTrEmpNiv.add(t);
                     break;
                 }
             }
         }
-        if (lEmpNiv.isEmpty()){
+        if (lTrEmpNiv.isEmpty()){
             return null;
         }
-        return lEmpNiv;
+        return lTrEmpNiv;
     }
 
     public int totalPourcentage(){

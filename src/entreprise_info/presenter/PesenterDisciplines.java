@@ -1,7 +1,9 @@
 package entreprise_info.presenter;
 
 import entreprise_info.metier.Disciplines;
+import entreprise_info.metier.Employe;
 import entreprise_info.modele.DAODisciplines;
+import entreprise_info.vue.VueDisciplines;
 import entreprise_info.vue.VueDisciplinesInterface;
 
 import java.util.Scanner;
@@ -21,10 +23,8 @@ public class PesenterDisciplines {
 
     public void Gestion(){
         do {
-            System.out.println("1.ajout\n2.recherche\n3.modification\n4.suppression\n5.fin");
-            System.out.println("choix : ");
-            int ch = sc.nextInt();
-            sc.skip("\n");
+            int ch = vueD.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.fin"});
+            ///sc.skip("\n");
             switch (ch) {
                 case 1:
                     ajout();
@@ -51,7 +51,7 @@ public class PesenterDisciplines {
         Disciplines discNew = vueD.create();
         discNew = mdD.create(discNew);
         if (discNew==null){
-            vueD.displayMsg("erreur lors de la création de l'employé - doublon");
+            vueD.displayMsg("erreur lors de la création de la discipline - doublon");
             return;
         }
 
@@ -64,7 +64,7 @@ public class PesenterDisciplines {
         Disciplines disc = new Disciplines(nRech,null,null);
         disc = mdD.read(disc);
         if (disc == null){
-            vueD.displayMsg("Employé introuvable");
+            vueD.displayMsg("Disciplines introuvable");
             return null;
         }
         vueD.display(disc);
@@ -93,5 +93,12 @@ public class PesenterDisciplines {
                 else vueD.displayMsg("Discipline non supprimé");
             }
         }
+    }
+
+    protected Disciplines choixDiscipline(Employe emp){
+        vueD.affLobj(mdD.readAll());
+        int choix = Integer.parseInt(vueD.getMsg("choix : "));
+        Disciplines d = emp.listeDisciplinesEtNiveau().get(choix-1).getId_Discipline();
+        return d;
     }
 }

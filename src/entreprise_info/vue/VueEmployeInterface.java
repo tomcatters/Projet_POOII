@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface VueEmployeInterface extends VueInterface<Employe,Integer>{
     void affLobj(List lobj);
+
+    int choixNiveau();
 }

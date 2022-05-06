@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface DAOProjet extends DAO<Projet>{
-    List<Employe> listeEmployesDisciplineBase(Projet pjt,int niv);
+    List<Travail> listeEmployesDisciplineBase(Projet pjt,int niv);
     List<Travail> listeEmployesEtPourcentageEtDate(Projet pjt);
     int totPour(Projet p);
 

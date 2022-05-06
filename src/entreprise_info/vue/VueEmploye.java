@@ -17,9 +17,21 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
         return empNew;
     }
 
-    public Employe update(Employe emp){
-        return emp;
-    } // a faire!!!
+    public Employe update(Employe emp) {
+        do {
+            int ch = Integer.parseInt(getMsg("1.changement de téléphone\n2.fin"));
+            switch (ch){
+                case 1:
+                    String ntel = getMsg("nouveau numéro de téléphone :");
+                    emp.setTel(ntel); //tester doublon!!
+                    break;
+                case 2:
+                    return emp;
+                default:
+                    displayMsg("choix invalide");
+            }
+        }while (true);
+    }
 
     public void display(Employe emp){
         displayMsg(emp.toString());
@@ -41,6 +53,14 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
         String ns = getMsg("numéro d'employé : ");
         int n = Integer.parseInt(ns);
         return n;
+    }
+
+    public int choixNiveau(){
+        int c;
+        do {
+            c = Integer.parseInt(getMsg("choix de niveau(1,2 ou 3): "));//
+            return c;
+        }while (c<1 && c>3);
     }
 
     @Override
