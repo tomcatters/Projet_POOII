@@ -24,7 +24,24 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
     }
 
     public Projet update(Projet p){
-        return p;
+        do {
+            int ch = Integer.parseInt(getMsg("1.changement de date\n2.changement du cout\n3.fin"));
+            switch (ch){
+                case 1:
+                    displayMsg("modifier la date de fin: ");
+                    Date dateFin = initDate();
+                    p.setDateFin(dateFin);
+                    break;
+                case 2:
+                    int cout = Integer.parseInt(getMsg("Modifier le cout: "));
+                    p.setCout(cout);
+                    break;
+                case 3:
+                    return p;
+                default:
+                    displayMsg("choix invalide");
+            }
+        }while (true);
     }
 
     public void display(Projet p){

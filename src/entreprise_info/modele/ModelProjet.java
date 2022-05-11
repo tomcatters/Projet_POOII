@@ -1,5 +1,6 @@
 package entreprise_info.modele;
 
+import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
 import entreprise_info.metier.Travail;
@@ -17,6 +18,8 @@ public class ModelProjet implements DAOProjet{
             return null;
         }
         lProjet.add(projetNew);
+        Disciplines dTmp = projetNew.getId_DisciplineBase();
+        dTmp.getlProjet().add(projetNew);
         return projetNew;
     }
 
@@ -37,6 +40,8 @@ public class ModelProjet implements DAOProjet{
     public boolean delete(Projet projetRech){
         Projet pjt = read(projetRech);
         if (pjt!=null){
+            Disciplines dTmp = projetRech.getId_DisciplineBase();
+            dTmp.getlProjet().remove(projetRech);
             lProjet.remove(pjt);
             return true;
         }else {

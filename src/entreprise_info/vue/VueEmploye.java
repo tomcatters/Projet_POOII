@@ -18,7 +18,7 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
     }
 
     public Employe update(Employe emp) {
-        do {
+        /*do {
             int ch = Integer.parseInt(getMsg("1.changement de téléphone\n2.fin"));
             switch (ch){
                 case 1:
@@ -30,7 +30,7 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
                 default:
                     displayMsg("choix invalide");
             }
-        }while (true);
+        }while (true);*/
     }
 
     public void display(Employe emp){

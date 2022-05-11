@@ -1,5 +1,7 @@
 package entreprise_info.metier;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Disciplines {
@@ -8,6 +10,8 @@ public class Disciplines {
 
     protected int id_Discipline;
     protected String nom,description;
+
+    protected List<Projet> lProjet = new ArrayList<>();
 
     public Disciplines(int id_Discipline, String nom, String description) {
         this.id_Discipline = id_Discipline;
@@ -65,5 +69,13 @@ public class Disciplines {
     @Override
     public int hashCode() {
         return Objects.hash(nom);
+    }
+
+    public List<Projet> getlProjet() {
+        return lProjet;
+    }
+
+    public void setlProjet(List<Projet> lProjet) {
+        this.lProjet = lProjet;
     }
 }

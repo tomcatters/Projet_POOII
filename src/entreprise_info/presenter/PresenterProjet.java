@@ -124,6 +124,7 @@ public class PresenterProjet {
         Projet pNew = vueP.create();
         Disciplines d = pD.recherche();
         pNew.setId_DisciplineBase(d);
+        //d.getlProjet().add(pNew);
         pNew = mdP.create(pNew);
         if (pNew==null){
             vueP.displayMsg("erreur lors de la création du projet - doublon");
