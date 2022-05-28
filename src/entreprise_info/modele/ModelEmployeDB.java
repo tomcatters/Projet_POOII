@@ -8,6 +8,7 @@ import myconnections.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +16,20 @@ public class ModelEmployeDB implements DAOEmploye{
 
     protected Connection dbConnect;
 
-    public void ModelEmployeDB(){
+    public ModelEmployeDB(){
         dbConnect = DBConnection.getConnection();
+        if (dbConnect == null) {
+            //System.exit(1);
+            System.out.println("rip");
+        }
+        System.out.println("connexion établie");
     }
 
     @Override
     public Employe create(Employe emp){
         String req1 = "insert into API_EMPLOYE(matricule,nom,prenom,tel,mail) values(?,?,?,?,?)";
-        String req2 = "SELECT id_employe FROM API_EMPLOYE WHERE matricule = ? nom = ? AND prenom = ?";
-        try(PreparedStatement pstm = dbConnect.prepareStatement(req1);
-            PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
+        String req2 = "SELECT id_employe FROM API_EMPLOYE WHERE matricule = ? AND nom = ? AND prenom = ?";
+        try(PreparedStatement pstm = dbConnect.prepareStatement(req1);){
             pstm.setInt(1, emp.getMatricule());
             pstm.setString(2, emp.getNom());
             pstm.setString(3, emp.getPrenom());
@@ -35,20 +40,26 @@ public class ModelEmployeDB implements DAOEmploye{
             if (n==0){
                 return null;
             }
-            pstm2.setInt(1,emp.getMatricule());
-            pstm2.setString(2,emp.getNom());
-            pstm2.setString(3,emp.getPrenom());
-            ResultSet rs = pstm2.executeQuery();
-            if (rs.next()){
-                int id_employe = rs.getInt(1);
-                emp.setId_employe(id_employe);
-                return emp;
-            }else {
-                throw new Exception("aucun client trouvé");
+            try (PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
+                pstm2.setInt(1,emp.getMatricule());
+                pstm2.setString(2,emp.getNom());
+                pstm2.setString(3,emp.getPrenom());
+                ResultSet rs = pstm2.executeQuery();
+                if (rs.next()){
+                    int id_employe = rs.getInt(1);
+                    emp.setId_employe(id_employe);
+                    emp.setlComp(new ArrayList<>());
+                }else {
+                    throw new Exception("aucun client trouvé");
+                }
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
             }
         }catch (Exception e){
-            return null;
+            System.out.println(e.getMessage());
+            //return null;
         }
+        return emp;
     }
 
     @Override
@@ -143,9 +154,7 @@ public class ModelEmployeDB implements DAOEmploye{
     @Override
     public Employe read(Employe emp){
         String req = "select * from api_employe where id_employe = ?";
-        List<Competence> compList = new ArrayList<>();
-        compList = listeDisciplinesEtNiveau(emp);
-        Employe empTemp = null;
+        //List<Competence> compList = new ArrayList<>();
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
             pstm.setInt(1,emp.getId_employe());
             ResultSet rs = pstm.executeQuery();
@@ -156,14 +165,13 @@ public class ModelEmployeDB implements DAOEmploye{
                 String prenom = rs.getString(4);
                 String tel = rs.getString(5);
                 String mail = rs.getString(6);
-                empTemp = new Employe(idemp,mat,nom,prenom,tel,mail);
-                compList = listeDisciplinesEtNiveau(empTemp);
-                empTemp.setlComp(compList);
+                emp = new Employe(idemp,mat,nom,prenom,tel,mail,new ArrayList<>());
+                emp.setlComp(listeDisciplinesEtNiveau(emp));
             }
-            return empTemp;
         }catch (Exception e){
             return null;
         }
+        return emp;
     }
 
     @Override
@@ -180,7 +188,7 @@ public class ModelEmployeDB implements DAOEmploye{
                 String prenom = rs.getString(4);
                 String tel = rs.getString(5);
                 String mail = rs.getString(6);
-                emp = new Employe(idemp,mat,nom,prenom,tel,mail);
+                emp = new Employe(idemp,mat,nom,prenom,tel,mail,new ArrayList<>());
                 lEmp.add(emp);
             }
             if (lEmp.isEmpty()){
@@ -196,37 +204,24 @@ public class ModelEmployeDB implements DAOEmploye{
     public List<Competence> listeDisciplinesEtNiveau(Employe emp){
         String req = "select * from emp_disc_niv_view where idemploye = ?";
         List<Competence> compList = new ArrayList<>();
-        try(PreparedStatement pstm = dbConnect.prepareStatement(req);){
-            pstm.setInt(1,emp.getId_employe());
+        Competence c = null;
+        Disciplines d = null;
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req);) {
+            pstm.setInt(1, emp.getId_employe());
             ResultSet rs = pstm.executeQuery();
-            if (rs.next()){
-                String req2 = "select * from api_disciplines where id_disciplines = ?";
-                Disciplines d = null;
-                int idemp = rs.getInt("IDEMPLOYE");
-                int idDisc = rs.getInt("ID_DISCIPLINES");
+            while (rs.next()) {
+                int id_disc = rs.getInt("ID_DISCIPLINES");
+                String nom_disc = rs.getString("NOMDISCIPLINE");
+                String desc = rs.getString("DESCRIPTION");
                 int niv = rs.getInt("NIVEAU");
-                try(PreparedStatement pstm2 = dbConnect.prepareStatement(req2);){
-                    pstm.setInt(1,idDisc);
-                    ResultSet rs2 = pstm2.executeQuery();
-                    if (rs2.next()){
-                        int idDisc2 = rs.getInt(1);
-                        String nomDisc = rs.getString(2);
-                        String Desc = rs.getString(3);
-                        d = new Disciplines(idDisc2,nomDisc,Desc);
-                    }else {
-                        throw new Exception("aucune discipline trouvé");
-                    }
-                }catch (Exception e){
-                    return null;
-                }
-                Competence c = new Competence(d,niv);
+                d = new Disciplines(id_disc, nom_disc, desc);
+                c = new Competence(d, niv);
                 compList.add(c);
-            }if (compList.isEmpty()){
-                return null;
             }
-            return compList;
-        }catch (Exception e){
+        } catch (Exception e) {
+            //System.out.println(e.getMessage());
             return null;
         }
+        return compList;
     }
 }

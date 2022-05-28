@@ -3,6 +3,7 @@ package entreprise_info.vue;
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Competence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VueEmploye extends VueCommune implements VueEmployeInterface{
@@ -13,29 +14,30 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
         String prenom = getMsg("prenom: ");
         String tel = getMsg("n° telephone: ");
         String mail = getMsg("adresse mail: ");
-        Employe empNew = new Employe(matricule,nom,prenom,tel,mail);
+        Employe empNew = new Employe(matricule,nom,prenom,tel,mail,new ArrayList<>());
         return empNew;
     }
 
     public Employe update(Employe emp) {
-        /*do {
+        do {
             int ch = Integer.parseInt(getMsg("1.changement de téléphone\n2.fin"));
             switch (ch){
                 case 1:
                     String ntel = getMsg("nouveau numéro de téléphone :");
                     emp.setTel(ntel); //tester doublon!!
-                    break;
+                    //break;
+                    return emp;
                 case 2:
                     return emp;
                 default:
                     displayMsg("choix invalide");
             }
-        }while (true);*/
+        }while (true);
     }
 
     public void display(Employe emp){
         displayMsg(emp.toString());
-        if (!emp.listeDisciplinesEtNiveau().isEmpty()) {
+        if (!emp.getlComp().isEmpty()) {
             String rep;
             do {
                 rep = getMsg("Afficher ses disciplines (o/n) ");
@@ -58,9 +60,9 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
     public int choixNiveau(){
         int c;
         do {
-            c = Integer.parseInt(getMsg("choix de niveau(1,2 ou 3): "));//
-            return c;
-        }while (c<1 && c>3);
+            c = Integer.parseInt(getMsg("choix de niveau(1,2 ou 3): "));
+        }while (c<1 || c>3);
+        return c;
     }
 
     @Override

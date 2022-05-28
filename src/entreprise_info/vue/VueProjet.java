@@ -1,7 +1,7 @@
 package entreprise_info.vue;
 
-import entreprise_info.metier.Competence;
 import entreprise_info.metier.Projet;
+import entreprise_info.metier.Travail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,19 +45,19 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
     }
 
     public void display(Projet p){
-        /*displayMsg(emp.toString());
-        if (!emp.listeDisciplinesEtNiveau().isEmpty()) {
+        displayMsg(p.toString());
+        if (!p.listeEmployesEtPourcentageEtDate().isEmpty()){
             String rep;
-            do {
-                rep = getMsg("Afficher ses disciplines (o/n) ");
-            } while (!rep.equalsIgnoreCase("o") && !rep.equalsIgnoreCase("n"));
+            do{
+                rep = getMsg("Afficher les travaillers (o/n)");
+            }while (!rep.equalsIgnoreCase("o") && !rep.equalsIgnoreCase("n"));
 
-            if (rep.equalsIgnoreCase("o")) {
-                for (Competence cpt : emp.listeDisciplinesEtNiveau()) {
-                    displayMsg(cpt.toString());
+            if (rep.equalsIgnoreCase("o")){
+                for (Travail t : p.listeEmployesEtPourcentageEtDate()){
+                    displayMsg(t.toString());
                 }
             }
-        }*/
+        }
     }
 
     public Integer read(){
@@ -75,6 +75,9 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        /*long mlsFinDate = d.getTime();
+        java.sql.Date dateFinSql = new java.sql.Date(mlsFinDate);
+        System.out.println(dateFinSql);*/
         return d;
         //System.out.println(sdf.format(d));
     }

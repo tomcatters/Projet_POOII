@@ -2,13 +2,14 @@ package entreprise_info.presenter;
 
 import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
+import entreprise_info.metier.Projet;
 import entreprise_info.modele.DAODisciplines;
-import entreprise_info.vue.VueDisciplines;
 import entreprise_info.vue.VueDisciplinesInterface;
 
+import java.util.List;
 import java.util.Scanner;
 
-public class PesenterDisciplines {
+public class PresenterDisciplines {
 
     private DAODisciplines mdD;
 
@@ -16,14 +17,14 @@ public class PesenterDisciplines {
 
     private Scanner sc = new Scanner(System.in);
 
-    public PesenterDisciplines(DAODisciplines mdD, VueDisciplinesInterface vueD) {
+    public PresenterDisciplines(DAODisciplines mdD, VueDisciplinesInterface vueD) {
         this.mdD = mdD;
         this.vueD = vueD;
     }
 
     public void Gestion(){
         do {
-            int ch = vueD.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.fin"});
+            int ch = vueD.menu(new String[]{"ajout","recherche","modification","suppression","fin"});
             ///sc.skip("\n");
             switch (ch) {
                 case 1:
@@ -39,8 +40,7 @@ public class PesenterDisciplines {
                     suppression();
                     break;
                 case 5:
-                    System.exit(0);
-                    break;
+                    return;
                 default:
                     System.out.println("choix invalide recommencez ");
             }
@@ -97,8 +97,20 @@ public class PesenterDisciplines {
 
     protected Disciplines choixDiscipline(Employe emp){
         vueD.affLobj(mdD.readAll());
-        int choix = Integer.parseInt(vueD.getMsg("choix : "));
-        Disciplines d = emp.listeDisciplinesEtNiveau().get(choix-1).getId_Discipline();
-        return d;
+        int s = mdD.readAll().size();
+        do {
+            int choix = Integer.parseInt(vueD.getMsg("choix id disciplines: "));
+            Disciplines d = new Disciplines(choix,null,null);
+            d = mdD.read(d);
+            if (d!=null){
+                return d;
+            }else {
+                vueD.displayMsg("choix incorrect");
+            }
+        }while (true);
+    }
+
+    protected void ajoutProjet(Projet p){
+
     }
 }

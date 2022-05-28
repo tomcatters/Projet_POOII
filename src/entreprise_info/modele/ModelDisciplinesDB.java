@@ -51,7 +51,7 @@ public class ModelDisciplinesDB implements DAODisciplines{
         try(PreparedStatement pstm = dbConnect.prepareStatement(req);){
             pstm.setString(1,objRech.getNom());
             pstm.setString(2,objRech.getDescription());
-
+            pstm.setInt(3,objRech.getId_Discipline());
             int n =pstm.executeUpdate();
             if (n==0){
                 throw new Exception("aucune discipline mis à jour");
@@ -66,6 +66,7 @@ public class ModelDisciplinesDB implements DAODisciplines{
     public boolean delete(Disciplines objRech) {
         String req = "delete from api_disciplines where id_disciplines=?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(req)){
+            pstm.setInt(1,objRech.getId_Discipline());
             int n = pstm.executeUpdate();
             if (n == 0) return false;
             else return true;
@@ -101,13 +102,13 @@ public class ModelDisciplinesDB implements DAODisciplines{
         Disciplines d = null;
         try (PreparedStatement pstm = dbConnect.prepareStatement(req);){
             ResultSet rs = pstm.executeQuery();
-            do {
+            while (rs.next()){
                 int idDisc = rs.getInt("ID_DISCIPLINES");
                 String nom = rs.getString("NOM");
                 String desc = rs.getString("DESCRIPTION");
                 d = new Disciplines(idDisc,nom,desc);
                 lDisc.add(d);
-            }while (rs.next());
+            }
             if (lDisc.isEmpty()){
                 return null;
             }

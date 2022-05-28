@@ -78,4 +78,6 @@ public class Disciplines {
     public void setlProjet(List<Projet> lProjet) {
         this.lProjet = lProjet;
     }
+
+
 }

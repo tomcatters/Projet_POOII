@@ -31,22 +31,41 @@ public class Employe {
      * @param mail adresse Email de l'employé
      */
 
-    public Employe(int id_employe, int matricule, String nom, String prenom, String tel, String mail) {
+    /*public Employe(int id_employe, int matricule, String nom, String prenom, String tel, String mail) {
         this.id_employe = id_employe;
         this.matricule = matricule;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
         this.mail = mail;
+    }*/
+
+    public Employe(int id_employe, int matricule, String nom, String prenom, String tel, String mail, List<Competence> lComp) {
+        this.id_employe = id_employe;
+        this.matricule = matricule;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+        this.mail = mail;
+        this.lComp = lComp;
     }
 
-    public Employe(int matricule, String nom, String prenom, String tel, String mail) {
+    /*public Employe(int matricule, String nom, String prenom, String tel, String mail) {
         this.id_employe = idEmp++;
         this.matricule = matricule;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
         this.mail = mail;
+    }*/
+
+    public Employe(int matricule, String nom, String prenom, String tel, String mail, List<Competence> lComp) {
+        this.matricule = matricule;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.tel = tel;
+        this.mail = mail;
+        this.lComp = lComp;
     }
 
     /**
@@ -266,7 +285,8 @@ public class Employe {
     @Override
     public String toString() {
         return "Employe{" +
-                "matricule=" + matricule +
+                "id_employe=" + id_employe +
+                ", matricule=" + matricule +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", tel='" + tel + '\'' +

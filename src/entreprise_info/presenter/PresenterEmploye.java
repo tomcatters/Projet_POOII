@@ -1,12 +1,10 @@
 package entreprise_info.presenter;
 
-import entreprise_info.metier.Competence;
 import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
 import entreprise_info.modele.DAOEmploye;
 import entreprise_info.vue.VueEmployeInterface;
 
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -15,7 +13,7 @@ public class PresenterEmploye {
     private DAOEmploye mdE;
     private VueEmployeInterface vueE;
 
-    private PesenterDisciplines pD;
+    protected PresenterDisciplines pD;
 
     private Scanner sc = new Scanner(System.in);
 
@@ -24,13 +22,13 @@ public class PresenterEmploye {
         this.vueE = vueE;
     }
 
-    public void setpD(PesenterDisciplines pD) {
+    public void setpD(PresenterDisciplines pD) {
         this.pD = pD;
     }
 
     public void Gestion(){
         do {
-            int ch = vueE.menu(new String[]{"1.ajout", "2.recherche","3.modification","n4.suppression","5.gestion des disciplines","6.afficher tous","7.fin"});
+            int ch = vueE.menu(new String[]{"ajout", "recherche","modification","suppression","gestion des disciplines","afficher tous","fin"});
             switch (ch) {
                 case 1:
                     ajout();
@@ -51,8 +49,9 @@ public class PresenterEmploye {
                     affAll();
                     break;
                 case 7:
-                    System.exit(0);
-                    break;
+                    return;
+                    //System.exit(0);
+                    //break;
                 default:
                     vueE.displayMsg("choix invalide recommencez ");
             }
@@ -65,8 +64,7 @@ public class PresenterEmploye {
 
         if (emp != null) {
             do {
-                boolean check=false;
-                int ch = vueE.menu(new String[]{"1.ajout discipline", "2.modification discipline", "3.suppression discipline","4.affichage des disciplines","4.fin"});
+                int ch = vueE.menu(new String[]{"ajout discipline", "modification discipline", "suppression discipline","affichage des disciplines","fin"});
                 switch (ch) {
                     case 1:
                         addDiscipline(emp);
@@ -78,22 +76,20 @@ public class PresenterEmploye {
                         suppDiscipline(emp);
                         break;
                     case 4:
-                        affDisc();
+                        affDisc(emp);
                         break;
                     case 5:
                         return;
                     default:
                         vueE.displayMsg("choix invalide recommencez ");
                 }
-                if(check==false) {
+                /*if(check==false) {
                     vueE.displayMsg("une erreur s'est produite");
                     continue;
                 }
                 if(emp.listeDisciplinesEtNiveau().isEmpty()) vueE.displayMsg("aucun élément à afficher");
-                else vueE.affLobj(emp.listeDisciplinesEtNiveau());
-            }
-
-            while (true) ;
+                else vueE.affLobj(emp.listeDisciplinesEtNiveau());*/
+            } while (true) ;
         }
     }
 
@@ -112,7 +108,7 @@ public class PresenterEmploye {
 
     protected Employe recherche(){
         int nRech = vueE.read();
-        Employe emp = new Employe(nRech,0,null,null,null,null);
+        Employe emp = new Employe(nRech,0,null,null,null,null,null);
         emp = mdE.read(emp);
         if (emp == null){
             vueE.displayMsg("Employé introuvable");
@@ -146,10 +142,15 @@ public class PresenterEmploye {
         }
     }
 
-    protected void addDiscipline(Employe emp){
+    protected boolean addDiscipline(Employe emp){
+        boolean check;
         Disciplines d = pD.recherche();
         int n=vueE.choixNiveau();
-        mdE.addDiscipline(emp,d,n);
+        check=mdE.addDiscipline(emp,d,n);
+        if (check==true){
+            return true;
+        }
+        return false;
     }
 
     protected void modifDiscipline(Employe emp){
@@ -163,8 +164,7 @@ public class PresenterEmploye {
         mdE.suppDiscipline(emp,d);
     }
 
-    private void affDisc(){
-        Employe emp = recherche();
+    private void affDisc(Employe emp){
         vueE.display(emp);
     }
 

@@ -12,7 +12,7 @@ public interface DAOProjet extends DAO<Projet>{
     List<Travail> listeEmployesEtPourcentageEtDate(Projet pjt);
     int totPour(Projet p);
 
-    boolean addEmploye(Projet p,Employe e, int pourcentage, Date dateEngag);
+    boolean addEmploye(Projet p,Employe e,int pour, Date d);
 
     boolean modifEmploye(Projet p,Employe e, int pourcentage);
 

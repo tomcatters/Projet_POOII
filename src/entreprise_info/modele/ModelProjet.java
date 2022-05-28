@@ -59,8 +59,8 @@ public class ModelProjet implements DAOProjet{
         return null;
     }
 
-    public boolean addEmploye(Projet p,Employe e, int pourcentage, Date dateEngag){
-        return p.addEmploye(e,pourcentage,dateEngag);
+    public boolean addEmploye(Projet p,Employe e, int pour, Date d){
+        return p.addEmploye(e,pour,d);
     }
 
     public boolean modifEmploye(Projet p,Employe e, int pourcentage){

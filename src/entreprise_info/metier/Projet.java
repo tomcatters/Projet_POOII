@@ -145,6 +145,14 @@ public class Projet {
         this.dateFin = dateFin;
     }
 
+    public List<Travail> getlTrav() {
+        return lTrav;
+    }
+
+    public void setlTrav(List<Travail> lTrav) {
+        this.lTrav = lTrav;
+    }
+
     @Override
     public String toString() {
         return "Projet{" +

@@ -1,14 +1,12 @@
 package entreprise_info.modele;
 
-import entreprise_info.metier.Disciplines;
-import entreprise_info.metier.Employe;
-import entreprise_info.metier.Projet;
-import entreprise_info.metier.Travail;
+import entreprise_info.metier.*;
 import myconnections.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +21,9 @@ public class ModelProjetDB implements DAOProjet{
 
     @Override
     public Projet create(Projet objNew) {
-        String req1 = "insert into api_projet(titre,datedebut,datefin,cout,id_disciplines)";
+        String req1 = "insert into api_projet(titre,datedebut,datefin,cout,id_disciplines) values (?,?,?,?,?)";
         String req2 = "select id_projet from api_projet where titre = ?";
-        try (PreparedStatement pstm = dbConnect.prepareStatement(req1);
-        PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req1);){
             pstm.setString(1,objNew.getTitre());
             long mlsDbtDate = objNew.getDateDebut().getTime();
             java.sql.Date dateDbtSql = new java.sql.Date(mlsDbtDate);
@@ -41,19 +38,26 @@ public class ModelProjetDB implements DAOProjet{
             if (n==0){
                 return null;
             }
-            pstm2.setString(1,objNew.getTitre());
+            try(PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
+                pstm2.setString(1,objNew.getTitre());
 
-            ResultSet rs = pstm2.executeQuery();
-            if(rs.next()){
-                int idPjt = rs.getInt("ID_PROJET");
-                objNew.setId_Projet(idPjt);
-                return objNew;
-            }else {
-                throw new Exception("aucun projet trouvé");
+                ResultSet rs = pstm2.executeQuery();
+                if(rs.next()){
+                    int idPjt = rs.getInt(1);
+                    objNew.setId_Projet(idPjt);
+                    objNew.setlTrav(new ArrayList<>());
+                    //return objNew;
+                }else {
+                    throw new Exception("aucun projet trouvé");
+                }
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+
             }
         }catch (Exception e){
-            return null;
+            System.out.println(e.getMessage());
         }
+        return objNew;
     }
 
     @Override
@@ -93,6 +97,7 @@ public class ModelProjetDB implements DAOProjet{
     @Override
     public Projet read(Projet objRech) {
         String req = "select * from api_projet join API_DISCIPLINES AD on AD.ID_DISCIPLINES = API_PROJET.ID_DISCIPLINES where id_projet = ?";
+        //String req2 = "select * from api_disciplines";
         Projet p = null;
         Disciplines d = null;
         try(PreparedStatement pstm = dbConnect.prepareCall(req)){
@@ -106,7 +111,7 @@ public class ModelProjetDB implements DAOProjet{
                 java.sql.Date sqlDateFin = rs.getDate("DATEFIN");
                 java.util.Date dateFin = new java.util.Date(sqlDateFin.getTime());
                 int cout = rs.getInt("COUT");
-                int id_disc = rs.getInt("AD.ID_DISCIPLINES");
+                int id_disc = rs.getInt("ID_DISCIPLINES");
                 String nom = rs.getString("NOM");
                 String desc = rs.getString("DESCRIPTION");
                 d = new Disciplines(id_disc,nom,desc);
@@ -153,46 +158,61 @@ public class ModelProjetDB implements DAOProjet{
     public List<Travail> listeEmployesDisciplineBase(Projet pjt, int niv) {
         String req = "select * from PROJ_EMP_DISCBASE_VIEW where id_projet = ? and DDB = ? and NIVEAU = ?";
         List<Travail> lTrav = new ArrayList<>();
-        Projet tmpProjet = read(pjt);
-        Employe tmpEmp = null;
         Travail t = null;
-
+        Employe emp = null;
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
             pstm.setInt(1,pjt.getId_Projet());
             pstm.setInt(2,pjt.getId_DisciplineBase().getId_Discipline());
             pstm.setInt(3,niv);
 
             ResultSet rs = pstm.executeQuery();
-            do {
+            while (rs.next()){
                 int id_emp = rs.getInt("IDEMPLOYE");
                 int mat = rs.getInt("MATRICULE");
                 String nom = rs.getString("NOM");
-                String prenom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
                 String  tel = rs.getString("TELNUM");
                 String mail = rs.getString("MAIL");
 
                 int pour = rs.getInt("POURCENTAGE");
-                java.sql.Date sqlDate = rs.getDate("DATEENGAG");
+                java.sql.Date sqlDate = rs.getDate("DATE_ENGAGEMENT");
                 java.util.Date dateEng = new java.util.Date(sqlDate.getTime());
-
-                tmpEmp = new Employe(id_emp,mat,nom,prenom,tel,mail);
-
-                t = new Travail(tmpEmp,pour,dateEng);
+                List<Competence> lComp = new ArrayList<>();
+                emp = new Employe(id_emp,mat,nom,prenom,tel,mail,lComp);
+                t = new Travail(emp,pour,dateEng);
                 lTrav.add(t);
-            }while (rs.next());
-            if (lTrav.isEmpty()){
-                return null;
-            }else {
-                return lTrav;
             }
         }catch (Exception e){
             return null;
         }
+        return lTrav;
     }
 
     @Override
     public List<Travail> listeEmployesEtPourcentageEtDate(Projet pjt) {
+        String req="select * from PROJ_EMP_POUR_DENG_DISC_VIEW where id_projet = ?";
         List<Travail> lTrav = new ArrayList<>();
+        try(PreparedStatement pstm = dbConnect.prepareStatement(req)) {
+            pstm.setInt(1,pjt.getId_Projet());
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ID_EMPLOYE");
+                int mat = rs.getInt("MATRICULE");
+                String nom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
+                String  tel = rs.getString("TEL");
+                String mail = rs.getString("MAIL");
+                int pour = rs.getInt("POURCENTAGE");
+                java.sql.Date sqlDate = rs.getDate("DATE_ENGAGEMENT");
+                java.util.Date dateEng = new java.util.Date(sqlDate.getTime());
+                List<Competence> lComp = new ArrayList<>();
+                Employe emp = new Employe(id,mat,nom,prenom,tel,mail,lComp);
+                Travail t = new Travail(emp,pour,dateEng);
+                lTrav.add(t);
+            }
+        }catch (Exception e){
+            return null;
+        }
         return lTrav;
     }
 
@@ -215,9 +235,9 @@ public class ModelProjetDB implements DAOProjet{
     }
 
     @Override
-    public boolean addEmploye(Projet p, Employe emp, int pourcentage, Date dateEngag) {
-        String req = "insert into api_travail (id_employe,id_projet,pourcentage,dateengag) values (?,?,?,?)";
-        try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
+    public boolean addEmploye(Projet p,Employe e,int pour,Date d) {
+        /*String req = "insert into api_travail (id_employe,id_projet,pourcentage,dateengag) values (?,?,?,?)";
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req);){
             pstm.setInt(1,emp.getId_employe());
             pstm.setInt(2,p.getId_Projet());
             pstm.setInt(3,pourcentage);
@@ -227,12 +247,33 @@ public class ModelProjetDB implements DAOProjet{
 
             int n = pstm.executeUpdate();
             if (n==0){
+                System.out.println("hello");
                 return false;
             }
-            else return true;
-        }catch (Exception e){
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
             return false;
         }
+        System.out.println("true");
+        return true;*/
+        String req = "insert into api_travail (id_employe,id_projet,pourcentage,dateengag) values (?,?,?,?)";
+        try(PreparedStatement pstm = dbConnect.prepareStatement(req)){
+            pstm.setInt(1,e.getId_employe());
+            pstm.setInt(2,p.getId_Projet());
+            pstm.setInt(3,pour);
+            long mlsDate = d.getTime();
+            java.sql.Date dateEg = new java.sql.Date(mlsDate);
+            pstm.setDate(4,dateEg);
+
+            int n = pstm.executeUpdate();
+            if (n==0){
+                return false;
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override

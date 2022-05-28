@@ -3,11 +3,11 @@ package entreprise_info.presenter;
 import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
+//import entreprise_info.metier.Travail;
 import entreprise_info.metier.Travail;
 import entreprise_info.modele.DAOProjet;
 import entreprise_info.vue.VueProjetInterface;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +20,7 @@ public class PresenterProjet {
 
     private PresenterEmploye pE;
 
-    private PesenterDisciplines pD;
+    private PresenterDisciplines pD;
 
     private Scanner sc = new Scanner(System.in);
 
@@ -33,17 +33,17 @@ public class PresenterProjet {
         this.pE = pE;
     }
 
-    public void setpD(PesenterDisciplines pD) {
+    public void setpD(PresenterDisciplines pD) {
         this.pD = pD;
     }
 
-    public PesenterDisciplines getpD() {
+    public PresenterDisciplines getpD() {
         return pD;
     }
 
     public void gestion() {
         do {
-            int ch = vueP.menu(new String[]{"1.ajout","2.recherche","3.modification","4.suppression","5.pourcentage total","6.gestion des equipes","7.option d'affichage","8.fin"});
+            int ch = vueP.menu(new String[]{"ajout","recherche","modification","suppression","pourcentage total","gestion des equipes","option d'affichage","fin"});
             switch (ch) {
                 case 1:
                     ajout();
@@ -67,8 +67,7 @@ public class PresenterProjet {
                     gestAff();
                     break;
                 case 8:
-                    System.exit(0);
-                    break;
+                    return;
                 default:
                     System.out.println("choix invalide recommencez ");
             }
@@ -80,8 +79,8 @@ public class PresenterProjet {
         Projet p = recherche();
 
         if (p!=null){
-            int ch = vueP.menu(new String[]{"1.ajout d'un employé", "2.modification d'un employé", "3.suppression d'un employé","4.fin"});
             do {
+                int ch = vueP.menu(new String[]{"ajout d'un employé", "modification d'un employé", "suppression d'un employé","fin"});
                 switch (ch){
                     case 1:
                         addEmploye(p);
@@ -105,8 +104,8 @@ public class PresenterProjet {
         Projet p = recherche();
 
         if (p!=null){
-            int ch = vueP.menu(new String[]{"1.Liste des employé d'un projet","2.Liste des employé ayant un niveau egal ou superieur a la disciplines de base d'un projet","3.fin"});
             do {
+                int ch = vueP.menu(new String[]{"Liste des employé d'un projet","Liste des employé ayant un niveau egal ou superieur a la disciplines de base d'un projet","fin"});
               switch (ch){
                   case 1:
                       affEmpPourDate(p);
@@ -171,11 +170,17 @@ public class PresenterProjet {
         }
     }
 
-    protected void addEmploye(Projet p){
+    protected boolean addEmploye(Projet p){
+        boolean ck;
         Employe emp = pE.recherche();
         int pour = Integer.parseInt(vueP.getMsg("Pourcentage: "));
+        vueP.displayMsg("Date de Debut");
         Date d = vueP.initDate();
-        mdP.addEmploye(p,emp,pour,d);
+        ck = mdP.addEmploye(p,emp,pour,d);
+        if (ck==true) {
+            vueP.displayMsg("Empoyé ajouté");
+            return true;
+        }return false;
     }
 
     protected void modifEmploye(Projet p){
@@ -198,11 +203,16 @@ public class PresenterProjet {
 
     protected void affEmpPourDate(Projet p){
         List<Travail> lTrEmpPourDt = mdP.listeEmployesEtPourcentageEtDate(p);
+        //System.out.println(lTrEmpPourDt.size());
         vueP.affLobj(lTrEmpPourDt);
     }
 
     protected void affEmpDiscBase(Projet p){
-        int niv = Integer.parseInt("niveau: ");
+        //int niv = Integer.parseInt(vueP.getMsg("niveau"));
+        //List<Travail> lTrEmpDiscB = mdP.listeEmployesDisciplineBase(p,niv);
+        //System.out.println(lTrEmpDiscB.size());
+        //vueP.affLobj(lTrEmpDiscB);
+        int niv = Integer.parseInt(vueP.getMsg("niveau"));
         List<Travail> lTrEmpDiscB = mdP.listeEmployesDisciplineBase(p,niv);
         vueP.affLobj(lTrEmpDiscB);
     }
