@@ -33,4 +33,17 @@ public class VueCommune implements VueCommuneInterface{
         String msg = sc.nextLine();
         return msg;
     }
+
+    public boolean verifierRegex(String entree,String regex){
+        return entree.matches(regex);
+    }
+
+    public String verifierEntree(String regex,String phrase){
+        String choix;
+        do {
+            System.out.print(phrase);
+            choix= sc.nextLine();
+        }while (!verifierRegex(choix,regex));
+        return choix;
+    }
 }

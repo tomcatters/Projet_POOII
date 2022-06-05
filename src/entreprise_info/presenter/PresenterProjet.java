@@ -3,7 +3,6 @@ package entreprise_info.presenter;
 import entreprise_info.metier.Disciplines;
 import entreprise_info.metier.Employe;
 import entreprise_info.metier.Projet;
-//import entreprise_info.metier.Travail;
 import entreprise_info.metier.Travail;
 import entreprise_info.modele.DAOProjet;
 import entreprise_info.vue.VueProjetInterface;
@@ -123,7 +122,6 @@ public class PresenterProjet {
         Projet pNew = vueP.create();
         Disciplines d = pD.recherche();
         pNew.setId_DisciplineBase(d);
-        //d.getlProjet().add(pNew);
         pNew = mdP.create(pNew);
         if (pNew==null){
             vueP.displayMsg("erreur lors de la création du projet - doublon");
@@ -170,28 +168,41 @@ public class PresenterProjet {
         }
     }
 
-    protected boolean addEmploye(Projet p){
+    protected void addEmploye(Projet p){
         boolean ck;
         Employe emp = pE.recherche();
         int pour = Integer.parseInt(vueP.getMsg("Pourcentage: "));
-        vueP.displayMsg("Date de Debut");
+        vueP.displayMsg("Date d'engagement");
         Date d = vueP.initDate();
         ck = mdP.addEmploye(p,emp,pour,d);
         if (ck==true) {
             vueP.displayMsg("Empoyé ajouté");
-            return true;
-        }return false;
+        }else {
+            vueP.displayMsg("Erreur");
+        }
     }
 
     protected void modifEmploye(Projet p){
+        boolean ck;
         Employe emp = pE.recherche();
         int pour = Integer.parseInt(vueP.getMsg("Pourcentage: "));
-        mdP.modifEmploye(p,emp,pour);
+        ck=mdP.modifEmploye(p,emp,pour);
+        if(ck==true){
+            vueP.displayMsg("Empoyé modifié");
+        }else {
+            vueP.displayMsg("Erreur");
+        }
     }
 
     protected void supEmploye(Projet p){
+        boolean ck;
         Employe emp = pE.recherche();
-        mdP.supEmploye(p,emp);
+        ck=mdP.supEmploye(p,emp);
+        if(ck==true){
+            vueP.displayMsg("Empoyé supprimé");
+        }else {
+            vueP.displayMsg("Erreur");
+        }
     }
 
     protected void pourTot(){
@@ -203,15 +214,10 @@ public class PresenterProjet {
 
     protected void affEmpPourDate(Projet p){
         List<Travail> lTrEmpPourDt = mdP.listeEmployesEtPourcentageEtDate(p);
-        //System.out.println(lTrEmpPourDt.size());
         vueP.affLobj(lTrEmpPourDt);
     }
 
     protected void affEmpDiscBase(Projet p){
-        //int niv = Integer.parseInt(vueP.getMsg("niveau"));
-        //List<Travail> lTrEmpDiscB = mdP.listeEmployesDisciplineBase(p,niv);
-        //System.out.println(lTrEmpDiscB.size());
-        //vueP.affLobj(lTrEmpDiscB);
         int niv = Integer.parseInt(vueP.getMsg("niveau"));
         List<Travail> lTrEmpDiscB = mdP.listeEmployesDisciplineBase(p,niv);
         vueP.affLobj(lTrEmpDiscB);

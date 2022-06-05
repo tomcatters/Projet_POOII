@@ -236,26 +236,6 @@ public class ModelProjetDB implements DAOProjet{
 
     @Override
     public boolean addEmploye(Projet p,Employe e,int pour,Date d) {
-        /*String req = "insert into api_travail (id_employe,id_projet,pourcentage,dateengag) values (?,?,?,?)";
-        try (PreparedStatement pstm = dbConnect.prepareStatement(req);){
-            pstm.setInt(1,emp.getId_employe());
-            pstm.setInt(2,p.getId_Projet());
-            pstm.setInt(3,pourcentage);
-            long mlsDate = dateEngag.getTime();
-            java.sql.Date dateEg = new java.sql.Date(mlsDate);
-            pstm.setDate(4,dateEg);
-
-            int n = pstm.executeUpdate();
-            if (n==0){
-                System.out.println("hello");
-                return false;
-            }
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        System.out.println("true");
-        return true;*/
         String req = "insert into api_travail (id_employe,id_projet,pourcentage,dateengag) values (?,?,?,?)";
         try(PreparedStatement pstm = dbConnect.prepareStatement(req)){
             pstm.setInt(1,e.getId_employe());
@@ -280,8 +260,9 @@ public class ModelProjetDB implements DAOProjet{
     public boolean modifEmploye(Projet p, Employe emp, int pourcentage) {
         String req = "update api_travail set pourcentage = ? where id_employe = ? and id_projet = ?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(req);){
-            pstm.setInt(1,emp.getId_employe());
-            pstm.setInt(2,p.getId_Projet());
+            pstm.setInt(1,pourcentage);
+            pstm.setInt(2,emp.getId_employe());
+            pstm.setInt(3,p.getId_Projet());
 
             int n = pstm.executeUpdate();
             if (n==0){

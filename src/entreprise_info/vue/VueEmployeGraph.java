@@ -19,9 +19,7 @@ public class VueEmployeGraph extends VueCommuneGraph implements VueEmployeInterf
     @Override
     public int choixNiveau() {
         int c;
-        do {
-            c = Integer.parseInt(getMsg("choix de niveau(1,2 ou 3): "));
-        }while (c<1 || c>3);
+        c = Integer.parseInt(verifierEntree("1|2|3","choix de niveau(1,2 ou 3): "));
         return c;
     }
 
@@ -56,7 +54,7 @@ public class VueEmployeGraph extends VueCommuneGraph implements VueEmployeInterf
         if (!obj.getlComp().isEmpty()){
             String rep;
             do {
-                rep = getMsg("Afficher les projet (o/n)");
+                rep = getMsg("Afficher les disciplines (o/n)");
             }while (!rep.equalsIgnoreCase("o") && !rep.equalsIgnoreCase("n"));
             if (rep.equalsIgnoreCase("o")) {
                 int i=0;

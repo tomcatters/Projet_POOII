@@ -4,6 +4,7 @@ import entreprise_info.metier.Competence;
 import entreprise_info.metier.Projet;
 import entreprise_info.metier.Travail;
 
+import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +17,23 @@ public class VueProjetGraph extends VueCommuneGraph implements VueProjetInterfac
 
     @Override
     public Projet create() {
-        return null;
+        JTextField tfTitre = new JTextField();
+        JTextField tfCout = new JTextField();
+
+        Object[] message = {
+                "Titre: ", tfTitre,
+                "Cout: ", tfCout
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message, "nouveau projet", JOptionPane.DEFAULT_OPTION);
+        String titre = tfTitre.getText().toString();
+        displayMsg("Date de Debut: ");
+        Date dateD = initDate();
+        displayMsg("Date de Fin: ");
+        Date dateF = initDate();
+        int cout = Integer.parseInt(tfCout.getText().toString());
+        Projet p = new Projet(titre,dateD,dateF,cout,null);
+        return p;
     }
 
     @Override
@@ -82,12 +99,17 @@ public class VueProjetGraph extends VueCommuneGraph implements VueProjetInterfac
     }
 
     @Override
-    public Date initDate() {
+    public Date initDate(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String str = sc.nextLine();
+        JTextField str = new JTextField();
         Date d = null;
+        Object message[] = {
+              "Date: ", str
+        };
+        int option = JOptionPane.showConfirmDialog(null, message, "nouvelle date", JOptionPane.DEFAULT_OPTION);
+        String dt = str.getText().toString();
         try {
-            d = sdf.parse(str);
+            d = sdf.parse(dt);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

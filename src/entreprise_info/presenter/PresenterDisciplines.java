@@ -25,7 +25,6 @@ public class PresenterDisciplines {
     public void Gestion(){
         do {
             int ch = vueD.menu(new String[]{"ajout","recherche","modification","suppression","fin"});
-            ///sc.skip("\n");
             switch (ch) {
                 case 1:
                     ajout();
@@ -55,7 +54,7 @@ public class PresenterDisciplines {
             return;
         }
 
-        vueD.displayMsg("Employé crée");
+        vueD.displayMsg("Discipline crée");
         vueD.display(discNew);
     }
 

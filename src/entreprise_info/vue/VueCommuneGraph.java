@@ -30,4 +30,24 @@ public class VueCommuneGraph implements VueCommuneInterface{
     public String getMsg(String invite) {
         return JOptionPane.showInputDialog(null,invite,"question",JOptionPane.DEFAULT_OPTION);
     }
+
+
+    public boolean verifierRegex(String entree,String regex){
+        return entree.matches(regex);
+    }
+
+    public String verifierEntree(String regex,String phrase){
+        String choix;
+        do {
+            JTextField chx = new JTextField();
+
+            Object message[] = {
+                    phrase, chx
+            };
+
+            int option = JOptionPane.showConfirmDialog(null, message, "question", JOptionPane.DEFAULT_OPTION);
+            choix = chx.getText().toString();
+        }while (!verifierRegex(choix,regex));
+        return choix;
+    }
 }

@@ -9,23 +9,22 @@ import java.util.List;
 public class VueEmploye extends VueCommune implements VueEmployeInterface{
 
     public Employe create(){
-        int matricule = Integer.parseInt(getMsg("n° matricule: "));
-        String nom = getMsg("nom: ");
-        String prenom = getMsg("prenom: ");
-        String tel = getMsg("n° telephone: ");
-        String mail = getMsg("adresse mail: ");
+        int matricule = Integer.parseInt(verifierEntree("\\d*","n° matricule: "));
+        String nom = verifierEntree("[A-Z][a-z]*","nom: ");
+        String prenom = verifierEntree("[A-Z][a-z]*","prenom: ");
+        String tel = verifierEntree("\\d{10}","n° telephone: ");
+        String mail = verifierEntree(".*","adresse mail: ");
         Employe empNew = new Employe(matricule,nom,prenom,tel,mail,new ArrayList<>());
         return empNew;
     }
 
     public Employe update(Employe emp) {
         do {
-            int ch = Integer.parseInt(getMsg("1.changement de téléphone\n2.fin"));
+            int ch = Integer.parseInt(verifierEntree("\\d","1.changement de téléphone\n2.fin"));
             switch (ch){
                 case 1:
-                    String ntel = getMsg("nouveau numéro de téléphone :");
-                    emp.setTel(ntel); //tester doublon!!
-                    //break;
+                    String ntel = verifierEntree("\\d{10}","nouveau numéro de téléphone :");
+                    emp.setTel(ntel);
                     return emp;
                 case 2:
                     return emp;
@@ -52,16 +51,13 @@ public class VueEmploye extends VueCommune implements VueEmployeInterface{
     }
 
     public Integer read(){
-        String ns = getMsg("numéro d'employé : ");
-        int n = Integer.parseInt(ns);
+        int n = Integer.parseInt(verifierEntree("\\d*","numéro d'employé : "));
         return n;
     }
 
     public int choixNiveau(){
         int c;
-        do {
-            c = Integer.parseInt(getMsg("choix de niveau(1,2 ou 3): "));
-        }while (c<1 || c>3);
+        c = Integer.parseInt(verifierEntree("1|2|3","choix de niveau(1,2 ou 3): "));
         return c;
     }
 

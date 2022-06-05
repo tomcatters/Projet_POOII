@@ -154,7 +154,6 @@ public class ModelEmployeDB implements DAOEmploye{
     @Override
     public Employe read(Employe emp){
         String req = "select * from api_employe where id_employe = ?";
-        //List<Competence> compList = new ArrayList<>();
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
             pstm.setInt(1,emp.getId_employe());
             ResultSet rs = pstm.executeQuery();
@@ -219,7 +218,6 @@ public class ModelEmployeDB implements DAOEmploye{
                 compList.add(c);
             }
         } catch (Exception e) {
-            //System.out.println(e.getMessage());
             return null;
         }
         return compList;

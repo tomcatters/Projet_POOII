@@ -13,8 +13,8 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
 
     private Scanner sc = new Scanner(System.in);
     public Projet create(){
-        String titre = getMsg("titre: ");
-        displayMsg("Date de Debut");
+        String titre = verifierEntree("[A-Z][a-z]*","titre: ");
+        displayMsg("Date de Debut: ");
         Date dateDebut = initDate();
         displayMsg("Date de fin: ");
         Date dateFin = initDate();
@@ -33,7 +33,7 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
                     p.setDateFin(dateFin);
                     break;
                 case 2:
-                    int cout = Integer.parseInt(getMsg("Modifier le cout: "));
+                    int cout = Integer.parseInt(verifierEntree("\\d*","Modifier le cout: "));
                     p.setCout(cout);
                     break;
                 case 3:
@@ -61,8 +61,7 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
     }
 
     public Integer read(){
-        String ns = getMsg("numéro de projet : ");
-        int n = Integer.parseInt(ns);
+        int n = Integer.parseInt(verifierEntree("\\d*","numéro de projet : "));
         return n;
     }
 
@@ -75,11 +74,7 @@ public class VueProjet extends VueCommune implements VueProjetInterface{
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        /*long mlsFinDate = d.getTime();
-        java.sql.Date dateFinSql = new java.sql.Date(mlsFinDate);
-        System.out.println(dateFinSql);*/
         return d;
-        //System.out.println(sdf.format(d));
     }
 
     public void affLobj(List lobj){

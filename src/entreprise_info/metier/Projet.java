@@ -64,7 +64,6 @@ public class Projet {
     }
 
     public List<Travail> listeEmployesDisciplineBase(int niv){
-        //List<Competence> compList = new ArrayList<>();
         List<Competence> compList;
         List <Travail> lTrEmpNiv = new ArrayList<>();
 
@@ -72,7 +71,6 @@ public class Projet {
             compList = t.getEmp().listeDisciplinesEtNiveau();
             for (Competence c: compList){
                 if (c.getNiveau() >= niv && c.getId_Discipline().equals(id_DisciplineBase)){
-                    //lTrEmpNiv.add(t.getEmp());
                     lTrEmpNiv.add(t);
                     break;
                 }

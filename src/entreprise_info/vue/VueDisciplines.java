@@ -7,8 +7,8 @@ import java.util.List;
 
 public class VueDisciplines extends VueCommune implements VueDisciplinesInterface{
     public Disciplines create(){
-        String nom = getMsg("nom: ");
-        String description = getMsg("description: ");
+        String nom = verifierEntree(".*","nom: ");
+        String description = verifierEntree(".*","description: ");
         Disciplines d = new Disciplines(nom,description);
         return d;
     }
@@ -18,7 +18,7 @@ public class VueDisciplines extends VueCommune implements VueDisciplinesInterfac
             int ch = Integer.parseInt(getMsg("1.changer la description\n2.frin"));
             switch (ch){
                 case 1:
-                    String desc = getMsg("nouvelle description: ");
+                    String desc = verifierEntree(".*","nouvelle description: ");
                     d.setDescription(desc);
                     return d;
                 case 2:
@@ -46,7 +46,7 @@ public class VueDisciplines extends VueCommune implements VueDisciplinesInterfac
     }
 
     public Integer read(){
-        String ns = getMsg("numéro de discipline : ");
+        String ns = verifierEntree("\\d*","numéro de discipline : ");
         int n = Integer.parseInt(ns);
         return n;
     }

@@ -50,8 +50,6 @@ public class PresenterEmploye {
                     break;
                 case 7:
                     return;
-                    //System.exit(0);
-                    //break;
                 default:
                     vueE.displayMsg("choix invalide recommencez ");
             }
@@ -83,12 +81,6 @@ public class PresenterEmploye {
                     default:
                         vueE.displayMsg("choix invalide recommencez ");
                 }
-                /*if(check==false) {
-                    vueE.displayMsg("une erreur s'est produite");
-                    continue;
-                }
-                if(emp.listeDisciplinesEtNiveau().isEmpty()) vueE.displayMsg("aucun élément à afficher");
-                else vueE.affLobj(emp.listeDisciplinesEtNiveau());*/
             } while (true) ;
         }
     }
